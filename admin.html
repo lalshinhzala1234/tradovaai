@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradoVault — Admin Panel</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+    :root {
+      --bg:#060914; --bg2:#0d1424; --glass:rgba(255,255,255,0.04);
+      --gb:rgba(255,255,255,0.09); --accent:#00f5c4; --accent2:#6366f1;
+      --red:#ff4d6d; --green:#00f5c4; --text:#e2e8f0; --muted:#64748b;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px 16px;}
+    body::before{content:'';position:fixed;top:-200px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.12) 0%,transparent 70%);pointer-events:none;z-index:0;}
+    .wrap{max-width:860px;margin:auto;position:relative;z-index:1;}
+
+    /* LOGIN */
+    #loginSection{background:var(--glass);border:1px solid var(--gb);border-radius:18px;padding:36px;max-width:400px;margin:60px auto;backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+    #loginSection h2{font-family:'Syne',sans-serif;font-size:1.3rem;margin-bottom:6px;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    #loginSection p{color:var(--muted);font-size:13px;margin-bottom:20px;}
+
+    /* INPUTS */
+    input,select{width:100%;padding:11px 14px;margin-bottom:12px;border:1px solid var(--gb);border-radius:8px;background:rgba(255,255,255,0.05);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s,box-shadow .2s;}
+    input:focus,select:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(99,102,241,0.12);}
+    input::placeholder{color:var(--muted);}
+
+    /* BUTTONS */
+    .btn{padding:11px 20px;border:none;border-radius:8px;font-weight:700;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;letter-spacing:.2px;}
+    .btn-full{width:100%;}
+    .btn-blue{background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;box-shadow:0 4px 14px rgba(99,102,241,0.4);}
+    .btn-blue:hover{box-shadow:0 6px 22px rgba(99,102,241,0.6);transform:translateY(-1px);}
+    .btn-green{background:linear-gradient(135deg,#00c896,#00f5c4);color:#060914;box-shadow:0 4px 12px rgba(0,245,196,0.3);}
+    .btn-green:hover{box-shadow:0 6px 20px rgba(0,245,196,0.5);transform:translateY(-1px);}
+    .btn-red{background:linear-gradient(135deg,#ff4d6d,#e11d48);color:white;box-shadow:0 4px 12px rgba(255,77,109,0.3);}
+    .btn-red:hover{box-shadow:0 6px 20px rgba(255,77,109,0.5);transform:translateY(-1px);}
+    .btn-ghost{background:rgba(255,255,255,0.06);border:1px solid var(--gb);color:var(--text);}
+    .btn-ghost:hover{background:rgba(255,255,255,0.1);}
+    .logout-btn{padding:6px 14px;background:rgba(255,77,109,0.12);border:1px solid rgba(255,77,109,0.25);color:var(--red);border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+    .logout-btn:hover{background:rgba(255,77,109,0.22);}
+
+    /* TOP BAR */
+    .topbar{display:flex;justify-content:space-between;align-items:center;background:var(--glass);border:1px solid var(--gb);border-radius:14px;padding:14px 20px;margin-bottom:20px;backdrop-filter:blur(14px);}
+    .topbar-logo{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .topbar-email{font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;}
+
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+    .stat{background:var(--glass);border:1px solid var(--gb);border-radius:14px;padding:18px;text-align:center;backdrop-filter:blur(12px);}
+    .stat-num{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;margin-bottom:4px;}
+    .stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+
+    /* CARD */
+    .card{background:var(--glass);border:1px solid var(--gb);border-radius:16px;padding:22px;margin-bottom:18px;backdrop-filter:blur(14px);box-shadow:0 6px 28px rgba(0,0,0,0.2);}
+    .card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    .card-title::before{content:'';width:3px;height:13px;border-radius:2px;background:linear-gradient(180deg,var(--accent2),var(--accent));display:inline-block;}
+
+    /* SEARCH */
+    .search-row{display:flex;gap:10px;}
+    .search-row input{margin-bottom:0;flex:1;}
+
+    /* USER RESULT BOX */
+    #userResult{margin-top:16px;padding:18px;background:rgba(255,255,255,0.025);border:1px solid var(--gb);border-radius:12px;display:none;}
+    .ur-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+    .ur-email{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);}
+    .ur-uid{font-size:10px;color:var(--muted);margin-top:3px;}
+    .plan-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;font-family:'Space Mono',monospace;}
+    .tag-free{background:rgba(255,255,255,0.07);color:var(--muted);}
+    .tag-pro{background:linear-gradient(135deg,#6366f1,#00f5c4);color:white;}
+    .ur-expiry{font-size:12px;color:var(--muted);margin-bottom:14px;}
+    .ur-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .ur-actions select{margin-bottom:0;width:auto;flex:1;min-width:160px;}
+
+    /* USERS LIST */
+    .user-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid var(--gb);margin-bottom:8px;gap:10px;flex-wrap:wrap;transition:all .2s;}
+    .user-row:hover{background:rgba(99,102,241,0.06);border-color:rgba(99,102,241,0.2);}
+    .ur-info{flex:1;min-width:0;}
+    .ur-name{font-family:'Space Mono',monospace;font-size:12px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ur-detail{font-size:11px;color:var(--muted);margin-top:2px;}
+    .ur-btns{display:flex;gap:6px;}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid var(--gb);color:var(--text);padding:11px 22px;border-radius:50px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.4);opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+    #toast.show{opacity:1;}
+    .err{color:var(--red);font-size:12px;margin-top:8px;}
+
+    @media(max-width:480px){
+      .stats{grid-template-columns:1fr 1fr;}
+      .search-row{flex-direction:column;}
+      .ur-actions{flex-direction:column;}
+      .ur-actions select,.ur-actions .btn{width:100%;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginSection">
+  <h2>🔐 Admin Login</h2>
+  <p>Only admin can access this panel</p>
+  <input type="email" id="adminEmail" placeholder="Admin Email">
+  <input type="password" id="adminPassword" placeholder="Password" onkeydown="if(event.key==='Enter')adminLogin()">
+  <button class="btn btn-blue btn-full" onclick="adminLogin()">Login →</button>
+  <p class="err" id="loginErr"></p>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div>
+        <div class="topbar-logo">⚡ TradoVault Admin</div>
+        <div class="topbar-email" id="adminEmailShow"></div>
+      </div>
+      <button class="logout-btn" onclick="adminLogout()">Logout</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num" id="statTotal" style="color:#e2e8f0;">—</div>
+        <div class="stat-lbl">Total Users</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statPro" style="color:#00f5c4;">—</div>
+        <div class="stat-lbl">Pro Users</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statFree" style="color:#6366f1;">—</div>
+        <div class="stat-lbl">Free Users</div>
+      </div>
+    </div>
+
+    <!-- SEARCH & ACTIVATE -->
+    <div class="card">
+      <div class="card-title">🔍 User Search & Plan Management</div>
+      <div class="search-row">
+        <input type="email" id="searchEmail" placeholder="Enter user email..." onkeydown="if(event.key==='Enter')searchUser()">
+        <button class="btn btn-blue" onclick="searchUser()">Search</button>
+      </div>
+      <p class="err" id="searchErr"></p>
+
+      <div id="userResult">
+        <div class="ur-top">
+          <div>
+            <div class="ur-email" id="resEmail">—</div>
+            <div class="ur-uid" id="resUID">UID: —</div>
+          </div>
+          <span class="plan-tag tag-free" id="resPlanTag">Free</span>
+        </div>
+        <div class="ur-expiry">Expiry: <strong id="resExpiry" style="color:#e2e8f0;">—</strong></div>
+        <div class="ur-actions">
+          <select id="planDuration">
+            <option value="1">1 Month — ₹199</option>
+            <option value="3">3 Months — ₹499</option>
+            <option value="6">6 Months — ₹999</option>
+            <option value="12">1 Year — ₹1799</option>
+          </select>
+          <button class="btn btn-green" onclick="activateUserPro()">⭐ Activate Pro</button>
+          <button class="btn btn-red" onclick="deactivateUserPro()">🔒 Set Free</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL USERS -->
+    <div class="card">
+      <div class="card-title">👥 All Users</div>
+      <button class="btn btn-ghost" style="margin-bottom:14px;" onclick="loadAllUsers()">🔄 Refresh</button>
+      <div id="usersList"><p style="color:#64748b;font-size:13px;">Click Refresh to load users</p></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYLiWO1W1leHPbkyNIOboZEXCqwaCOjYQ",
+    authDomain: "trading-journal-8a0ea.firebaseapp.com",
+    projectId: "trading-journal-8a0ea",
+    storageBucket: "trading-journal-8a0ea.firebasestorage.app",
+    messagingSenderId: "77123353596",
+    appId: "1:77123353596:web:17cc7fc8ab0935cda75079"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // ⚠️ APNA ADMIN EMAIL YAHAN HAI
+  const ADMIN_EMAIL = "vivekb00713@gmail.com";
+
+  // Current searched user
+  let currentUID = null;
+
+  // Auth state
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.email === ADMIN_EMAIL) {
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
+      document.getElementById("adminEmailShow").textContent = "👤 " + user.email;
+      loadAllUsers();
+    } else if (user) {
+      showToast("❌ You do not have admin access!");
+      signOut(auth);
+    } else {
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("adminPanel").style.display = "none";
+    }
+  });
+
+  // ---- LOGIN ----
+  window.adminLogin = async function () {
+    const email = document.getElementById("adminEmail").value.trim();
+    const pass  = document.getElementById("adminPassword").value;
+    document.getElementById("loginErr").textContent = "";
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+    } catch (e) {
+      document.getElementById("loginErr").textContent = "❌ " + e.message;
+    }
+  };
+
+  // ---- LOGOUT ----
+  window.adminLogout = async function () {
+    await signOut(auth);
+  };
+
+  // ---- SEARCH USER ----
+  window.searchUser = async function () {
+    const email = document.getElementById("searchEmail").value.trim().toLowerCase();
+    document.getElementById("searchErr").textContent = "";
+    document.getElementById("userResult").style.display = "none";
+    if (!email) { document.getElementById("searchErr").textContent = "Email daalo!"; return; }
+
+    try {
+      const usersSnap = await getDocs(collection(db, "users"));
+      let foundUID = null;
+
+      usersSnap.forEach(docSnap => {
+        const data = docSnap.data();
+        // Check email field
+        if (data.email && data.email.toLowerCase() === email) {
+          foundUID = docSnap.id;
+        }
+      });
+
+      if (!foundUID) {
+        document.getElementById("searchErr").textContent = "⚠️ User not found. The user must log in to the app first.";
+        return;
+      }
+
+      currentUID = foundUID;
+      await showUserResult(foundUID, email);
+
+    } catch (e) {
+      document.getElementById("searchErr").textContent = "Error: " + e.message;
+    }
+  };
+
+  async function showUserResult(uid, email) {
+    const planSnap = await getDoc(doc(db, "users", uid, "settings", "plan"));
+    let plan = "free", expiry = null;
+    if (planSnap.exists()) {
+      plan   = planSnap.data().plan || "free";
+      expiry = planSnap.data().expiryDate || null;
+      if (expiry && new Date(expiry) < new Date()) plan = "free";
+    }
+
+    document.getElementById("resEmail").textContent = email;
+    document.getElementById("resUID").textContent = "UID: " + uid;
+    document.getElementById("resExpiry").textContent = expiry ? new Date(expiry).toLocaleDateString("en-IN") : "N/A";
+
+    const tag = document.getElementById("resPlanTag");
+    if (plan === "pro") {
+      tag.textContent = "⭐ Pro";
+      tag.className = "plan-tag tag-pro";
+    } else {
+      tag.textContent = "🔒 Free";
+      tag.className = "plan-tag tag-free";
+    }
+
+    document.getElementById("userResult").style.display = "block";
+  }
+
+  // ---- ACTIVATE PRO ----
+  window.activateUserPro = async function () {
+    if (!currentUID) return;
+    const months = parseInt(document.getElementById("planDuration").value);
+    const expiry = new Date();
+    expiry.setMonth(expiry.getMonth() + months);
+
+    try {
+      await setDoc(doc(db, "users", currentUID, "settings", "plan"), {
+        plan: "pro",
+        expiryDate: expiry.toISOString(),
+        updatedAt: new Date().toISOString(),
+        activatedBy: "admin"
+      });
+      showToast("✅ Pro activated! Expiry: " + expiry.toLocaleDateString("en-IN"));
+      await showUserResult(currentUID, document.getElementById("resEmail").textContent);
+      await loadAllUsers();
+    } catch (e) {
+      showToast("❌ Error: " + e.message);
+    }
+  };
+
+  // ---- DEACTIVATE ----
+  window.deactivateUserPro = async function () {
+    if (!currentUID) return;
+    if (!confirm("Are you sure you want to set this user to Free plan?")) return;
+    try {
+      await setDoc(doc(db, "users", currentUID, "settings", "plan"), {
+        plan: "free",
+        expiryDate: null,
+        updatedAt: new Date().toISOString(),
+        activatedBy: "admin"
+      });
+      showToast("✅ Plan set to Free!");
+      await showUserResult(currentUID, document.getElementById("resEmail").textContent);
+      await loadAllUsers();
+    } catch (e) {
+      showToast("❌ Error: " + e.message);
+    }
+  };
+
+  // ---- LOAD ALL USERS ----
+  window.loadAllUsers = async function () {
+    const list = document.getElementById("usersList");
+    list.innerHTML = "<p style='color:#64748b;font-size:13px;'>Loading...</p>";
+    try {
+      const usersSnap = await getDocs(collection(db, "users"));
+      let total = 0, proCount = 0, freeCount = 0;
+      let html = "";
+
+      for (const userDoc of usersSnap.docs) {
+        total++;
+        const uid  = userDoc.id;
+        const data = userDoc.data();
+        const email = data.email || uid;
+
+        // Get plan
+        const planSnap = await getDoc(doc(db, "users", uid, "settings", "plan"));
+        let plan = "free", expiry = null;
+        if (planSnap.exists()) {
+          plan   = planSnap.data().plan || "free";
+          expiry = planSnap.data().expiryDate || null;
+          if (expiry && new Date(expiry) < new Date()) plan = "free";
+        }
+
+        if (plan === "pro") proCount++; else freeCount++;
+
+        const expiryStr = expiry ? new Date(expiry).toLocaleDateString("en-IN") : "-";
+        const planHtml  = plan === "pro"
+          ? `<span style="color:#00f5c4;font-weight:800;font-size:11px;">⭐ PRO</span>`
+          : `<span style="color:#64748b;font-weight:700;font-size:11px;">🔒 FREE</span>`;
+
+        html += `
+          <div class="user-row">
+            <div class="ur-info">
+              <div class="ur-name">${email}</div>
+              <div class="ur-detail">Expiry: ${expiryStr}</div>
+            </div>
+            ${planHtml}
+            <div class="ur-btns">
+              <button class="btn btn-green" style="padding:5px 10px;font-size:11px;" onclick="quickActivate('${uid}','${email}')">⭐ Pro</button>
+              <button class="btn btn-red" style="padding:5px 10px;font-size:11px;" onclick="quickDeactivate('${uid}','${email}')">🔒 Free</button>
+            </div>
+          </div>`;
+      }
+
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statPro").textContent   = proCount;
+      document.getElementById("statFree").textContent  = freeCount;
+      list.innerHTML = html || "<p style='color:#64748b;font-size:13px;'>No users found</p>";
+
+    } catch (e) {
+      list.innerHTML = "<p style='color:#ff4d6d;font-size:13px;'>Error: " + e.message + "</p>";
+    }
+  };
+
+  // Quick activate from list
+  window.quickActivate = async function (uid, email) {
+    const expiry = new Date();
+    expiry.setMonth(expiry.getMonth() + 1);
+    try {
+      await setDoc(doc(db, "users", uid, "settings", "plan"), {
+        plan: "pro", expiryDate: expiry.toISOString(),
+        updatedAt: new Date().toISOString(), activatedBy: "admin"
+      });
+      showToast("✅ " + email + " — Pro activated!");
+      loadAllUsers();
+    } catch (e) { showToast("❌ " + e.message); }
+  };
+
+  window.quickDeactivate = async function (uid, email) {
+    if (!confirm(email + " to Free plan?")) return;
+    try {
+      await setDoc(doc(db, "users", uid, "settings", "plan"), {
+        plan: "free", expiryDate: null,
+        updatedAt: new Date().toISOString(), activatedBy: "admin"
+      });
+      showToast("✅ " + email + " — Free set!");
+      loadAllUsers();
+    } catch (e) { showToast("❌ " + e.message); }
+  };
+
+  // ---- TOAST ----
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
+  window.showToast = showToast;
+</script>
+
+</body>
+</html>

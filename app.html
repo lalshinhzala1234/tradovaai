@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Journal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <h1>Trading Journal</h1>
+  <button id="themeToggle">🌙</button>
+
+  <!-- Firebase Auth UI -->
+  <div id="authSection" style="max-width:400px;margin:40px auto;background:#1e293b;padding:30px;border-radius:12px;text-align:center;">
+    <h2 id="authTitle">Welcome Back</h2>
+    <p id="authMsg" style="color:#94a3b8;font-size:13px;margin-bottom:16px;">Sync your trades across all devices</p>
+    <input type="email" id="authEmail" placeholder="Email" style="width:100%;padding:10px;border-radius:6px;border:none;background:#0f172a;color:white;margin-bottom:10px;box-sizing:border-box;">
+    <input type="password" id="authPassword" placeholder="Password" style="width:100%;padding:10px;border-radius:6px;border:none;background:#0f172a;color:white;margin-bottom:14px;box-sizing:border-box;">
+    <button onclick="loginUser()" style="width:100%;padding:11px;background:#3b82f6;border:none;border-radius:6px;color:white;font-weight:bold;cursor:pointer;margin-bottom:8px;">Login</button>
+    <button onclick="registerUser()" style="width:100%;padding:11px;background:#22c55e;border:none;border-radius:6px;color:white;font-weight:bold;cursor:pointer;margin-bottom:8px;">Register</button>
+    <button onclick="loginGoogle()" style="width:100%;padding:11px;background:#ef4444;border:none;border-radius:6px;color:white;font-weight:bold;cursor:pointer;margin-bottom:8px;">🔴 Continue with Google</button>
+    <button onclick="forgotPassword()" style="width:100%;padding:11px;background:transparent;border:1px solid #334155;border-radius:6px;color:#94a3b8;font-weight:600;cursor:pointer;font-size:13px;">Forgot Password?</button>
+    <p id="authError" style="color:#ef4444;font-size:12px;margin-top:10px;"></p>
+  </div>
+
+  <!-- Main App (hidden until login) -->
+  <div id="mainApp" style="display:none;">
+
+    <!-- User info bar -->
+    <div style="max-width:1100px;margin:0 auto 10px auto;display:flex;justify-content:flex-end;align-items:center;gap:12px;">
+      <span id="userEmailDisplay" style="color:#94a3b8;font-size:13px;"></span>
+      <span id="planBadge" style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;font-family:monospace;cursor:pointer;" onclick="window.location.href='index.html#pricing'">🔒 Free — 20 Trades</span>
+      <button onclick="logoutUser()" style="padding:6px 14px;background:#ef4444;border:none;border-radius:6px;color:white;font-size:13px;cursor:pointer;">Logout</button>
+    </div>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('dashboard', this)">📊 Dashboard</button>
+      <button class="nav-tab" onclick="showTab('analytics', this)">🔍 Analytics</button>
+      <button class="nav-tab" onclick="showTab('gallery', this)">🖼️ Gallery</button>
+      <button class="nav-tab" onclick="showTab('ai-review', this)">🤖 AI Review</button>
+      <button class="nav-tab" onclick="showTab('goals', this)">🎯 Goals</button>
+      <button class="nav-tab" onclick="showTab('replay', this)">▶️ Replay</button>
+      <button class="nav-tab" onclick="showTab('session', this)">⏰ Session</button>
+      <button class="nav-tab" onclick="showTab('backup', this)">💾 Backup</button>
+      <button class="nav-tab" onclick="showTab('score', this)">🏆 Trader Score</button>
+    </div>
+
+    <div class="container">
+
+      <!-- TAB: DASHBOARD -->
+      <div id="tab-dashboard" class="tab-content active">
+
+        <div class="dashboard">
+          <h2>Dashboard</h2>
+
+          <!-- Account Settings -->
+          <div class="account-box">
+            <h3>⚙️ Account Settings</h3>
+            <div class="account-inputs">
+              <input type="number" id="accountSize" placeholder="Account Size (e.g. 10000)" step="any">
+              <input type="number" id="riskPercent" placeholder="Risk % per trade (e.g. 2)">
+              <button onclick="saveAccountSettings()">Save</button>
+            </div>
+            <div class="account-stats">
+              <span>Account: <strong id="displayAccount">-</strong></span>
+              <span>Risk/Trade: <strong id="displayRisk">-</strong></span>
+              <span>Max Risk Amount: <strong id="displayRiskAmt">-</strong></span>
+            </div>
+          </div>
+
+          <!-- Filter -->
+          <div class="filter-box">
+            <select id="dateFilter">
+              <option value="all">All Time</option>
+              <option value="7">Last 7 Days</option>
+              <option value="30">Last 30 Days</option>
+            </select>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label style="font-size:10px;color:#00f5c4;font-weight:700;letter-spacing:0.5px;">📅 Start Date</label>
+              <input type="date" id="startDate">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label style="font-size:10px;color:#00f5c4;font-weight:700;letter-spacing:0.5px;">📅 End Date</label>
+              <input type="date" id="endDate">
+            </div>
+            <button onclick="applyFilter()">Apply</button>
+            <button onclick="exportCSV()" class="export-btn">⬇️ Export CSV</button>
+            <button onclick="document.getElementById('importFile').click()" class="import-btn">⬆️ Import CSV</button>
+            <input type="file" id="importFile" accept=".csv" style="display:none" onchange="importCSV(event)">
+          </div>
+
+          <!-- Charts -->
+          <div class="chart-box"><h2>Performance</h2><canvas id="profitChart"></canvas></div>
+          <div class="chart-box"><h2>Win vs Loss</h2><div style="max-width:320px;margin:0 auto;"><canvas id="winLossChart"></canvas></div></div>
+          <div class="chart-box"><h2>Monthly Profit</h2><canvas id="monthlyChart"></canvas></div>
+          <div class="chart-box"><h2>Strategy Performance</h2><canvas id="strategyChart"></canvas></div>
+          <div class="chart-box"><h2>Strategy Comparison (Win Rate %)</h2><canvas id="strategyCompareChart"></canvas></div>
+          <div class="chart-box"><h2>Pair Performance</h2><canvas id="pairChart"></canvas></div>
+          <div class="chart-box"><h2>Max Drawdown</h2><canvas id="drawdownChart"></canvas></div>
+
+          <!-- Calendar View -->
+          <div class="chart-box calendar-section">
+            <h2>📅 Calendar View</h2>
+            <div class="calendar-nav">
+              <button onclick="changeMonth(-1)">&#8249;</button>
+              <span id="calendarTitle"></span>
+              <button onclick="changeMonth(1)">&#8250;</button>
+            </div>
+            <div id="calendarGrid" class="calendar-grid"></div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats">
+            <div class="stat-box"><h3>Total Trades</h3><p id="totalTrades">0</p></div>
+            <div class="stat-box"><h3>Win Rate</h3><p id="winRate">0%</p></div>
+            <div class="stat-box"><h3>Total Profit</h3><p id="totalProfit">0</p></div>
+            <div class="stat-box"><h3>Best Trade</h3><p id="bestTrade">0</p></div>
+            <div class="stat-box"><h3>Worst Trade</h3><p id="worstTrade">0</p></div>
+            <div class="stat-box"><h3>Profit Factor</h3><p id="profitFactor">0</p></div>
+            <div class="stat-box"><h3>Average Win</h3><p id="avgWin">0</p></div>
+            <div class="stat-box"><h3>Average Loss</h3><p id="avgLoss">0</p></div>
+            <div class="stat-box"><h3>Expectancy</h3><p id="expectancy">0</p></div>
+            <div class="stat-box"><h3>Max Win Streak</h3><p id="winStreak">0</p></div>
+            <div class="stat-box"><h3>Max Loss Streak</h3><p id="lossStreak">0</p></div>
+          </div>
+
+        </div>
+
+        <!-- Trade Form -->
+        <div class="trade-form">
+          <h2>Add Trade</h2>
+          <form id="tradeForm">
+            <input type="text" id="pair" placeholder="Pair (ex: BTCUSDT)" required>
+            <label style="font-size:11px;color:#00f5c4;font-weight:700;letter-spacing:0.5px;display:block;margin-bottom:4px;">📅 Trade Date</label>
+            <input type="date" id="tradeDate">
+            <select id="positionType">
+              <option value="Long">Long 📈</option>
+              <option value="Short">Short 📉</option>
+            </select>
+            <input type="number" id="entryPrice" placeholder="Entry Price" step="any" required>
+            <input type="number" id="exitPrice" placeholder="Exit Price" step="any">
+            <input type="number" id="stopLoss" placeholder="Stop Loss Price" step="any">
+            <input type="number" id="takeProfit" placeholder="Take Profit Price" step="any">
+            <div id="rrDisplay" class="rr-display" style="display:none;">
+              R:R = <strong id="rrValue">-</strong>
+            </div>
+            <input type="number" id="quantity" placeholder="Quantity" step="any">
+            <input type="number" id="leverage" placeholder="Leverage (e.g. 10)" step="0.1" min="1">
+            <input type="text" id="strategy" placeholder="Strategy">
+            <input type="text" id="tradeTags" placeholder="Tags (e.g. Breakout, Scalp, Swing)">
+            <label style="font-size:11px;color:#6366f1;font-weight:700;letter-spacing:0.5px;display:block;margin-bottom:4px;">⏰ Trade Open Time <span style="color:#64748b;font-weight:400;font-size:10px;">(optional)</span></label>
+            <input type="datetime-local" id="tradeOpenTime">
+            <label style="font-size:11px;color:#6366f1;font-weight:700;letter-spacing:0.5px;display:block;margin-bottom:4px;">⏰ Trade Close Time <span style="color:#64748b;font-weight:400;font-size:10px;">(optional)</span></label>
+            <input type="datetime-local" id="tradeCloseTime">
+            <select id="mistakeType">
+              <option value="">No Mistake ✅</option>
+              <option value="FOMO">FOMO 😰</option>
+              <option value="Late Entry">Late Entry ⏰</option>
+              <option value="Early Exit">Early Exit 🚪</option>
+              <option value="Overleverage">Overleverage ⚠️</option>
+              <option value="No SL">No Stop Loss ❌</option>
+              <option value="Revenge Trade">Revenge Trade 😤</option>
+              <option value="Other">Other</option>
+            </select>
+            <textarea id="notes" placeholder="Trade Notes"></textarea>
+            <label>Trade Screenshot</label>
+            <input type="file" id="tradeImage" accept="image/*">
+            <div id="imagePreviewBox" style="margin-top:10px;display:none;">
+              <img id="imagePreview" style="max-width:150px;border-radius:6px;">
+            </div>
+            <button type="submit" id="submitBtn">Add Trade</button>
+          </form>
+        </div>
+
+        <!-- Trade History -->
+        <div class="trade-history">
+          <h2>Trade History</h2>
+          <div style="overflow-x:auto;">
+            <table id="tradeTable">
+              <thead>
+                <tr>
+                  <th>Pair</th><th>Type</th><th>Entry</th><th>Exit</th>
+                  <th>SL</th><th>TP</th><th>R:R</th><th>Qty</th><th>Lev</th>
+                  <th>Profit</th><th>Strategy</th><th>Tags</th>
+                  <th>Mistake</th><th>Duration</th><th>Notes</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="tradeTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: ANALYTICS -->
+      <div id="tab-analytics" class="tab-content">
+        <div class="analytics-section">
+          <h2>🔍 Trade Analytics</h2>
+          <div class="analytics-cards" id="analyticsCards"></div>
+          <div class="chart-box" style="margin-top:24px;">
+            <h2>🏆 Pair Leaderboard</h2>
+            <div class="leaderboard-tabs">
+              <button class="lb-tab active" onclick="showLeaderboard('profit', this)">💰 By Profit</button>
+              <button class="lb-tab" onclick="showLeaderboard('winrate', this)">🎯 By Win Rate</button>
+              <button class="lb-tab" onclick="showLeaderboard('trades', this)">📊 By Trades</button>
+            </div>
+            <div id="leaderboardList"></div>
+          </div>
+          <div class="chart-box" style="margin-top:24px;">
+            <h2>📋 Strategy Report</h2>
+            <div id="strategyReport"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: GALLERY -->
+      <div id="tab-gallery" class="tab-content">
+        <h2>🖼️ Screenshot Gallery</h2>
+        <div id="screenshotGallery" class="gallery-grid"></div>
+      </div>
+
+      <!-- TAB: AI REVIEW -->
+      <div id="tab-ai-review" class="tab-content">
+        <h2>🤖 AI Trade Review</h2>
+        <p class="ai-desc">AI will analyze your trades and suggest improvements.</p>
+        <button onclick="runAIReview()" class="ai-btn" id="aiReviewBtn">▶ Run AI Review</button>
+        <div id="aiReviewResult" class="ai-result"></div>
+      </div>
+
+      <!-- TAB: GOALS -->
+      <div id="tab-goals" class="tab-content">
+        <h2>🎯 Equity Goal Tracker</h2>
+        <div class="goal-setup">
+          <input type="number" id="monthlyGoal" placeholder="Monthly Profit Target (e.g. 5000)">
+          <button onclick="saveGoal()">Save Goal</button>
+        </div>
+        <div id="goalDisplay" class="goal-display"></div>
+        <div class="chart-box" style="margin-top:20px;">
+          <h2>Monthly Progress</h2>
+          <canvas id="goalChart"></canvas>
+        </div>
+      </div>
+
+      <!-- TAB: TRADE REPLAY -->
+      <div id="tab-replay" class="tab-content">
+        <h2>▶️ Trade Replay</h2>
+        <p class="ai-desc">Replay your trades one by one and watch your equity curve build live.</p>
+        <div class="replay-controls">
+          <button id="replayPlayBtn" onclick="replayPlay()">▶ Play</button>
+          <button onclick="replayPause()">⏸ Pause</button>
+          <button onclick="replayReset()">⏮ Reset</button>
+          <div class="replay-speed">
+            <label>Speed:</label>
+            <select id="replaySpeed">
+              <option value="1500">Slow</option>
+              <option value="800" selected>Normal</option>
+              <option value="300">Fast</option>
+            </select>
+          </div>
+        </div>
+        <div class="replay-progress-bar">
+          <div id="replayProgressFill" class="replay-progress-fill"></div>
+        </div>
+        <div class="replay-trade-card" id="replayTradeCard">
+          <p style="color:#64748b;text-align:center">Press Play to start the replay</p>
+        </div>
+        <div class="chart-box" style="margin-top:16px;">
+          <h2>Equity Curve (Live)</h2>
+          <canvas id="replayChart"></canvas>
+        </div>
+        <div class="replay-stats" id="replayStats"></div>
+      </div>
+
+      <!-- TAB: SESSION ANALYSIS -->
+      <div id="tab-session" class="tab-content">
+        <h2>⏰ Session Analysis</h2>
+        <p class="ai-desc">Discover which trading sessions are most profitable for you.</p>
+        <div class="session-info-box">
+          <div class="session-time-legend">
+            <span class="sleg morning">🌅 Morning (6am-12pm)</span>
+            <span class="sleg afternoon">☀️ Afternoon (12pm-4pm)</span>
+            <span class="sleg evening">🌆 Evening (4pm-8pm)</span>
+            <span class="sleg night">🌙 Night (8pm-6am)</span>
+          </div>
+        </div>
+        <div class="session-cards" id="sessionCards"></div>
+        <div class="chart-box" style="margin-top:20px;"><h2>Session Profit Comparison</h2><canvas id="sessionProfitChart"></canvas></div>
+        <div class="chart-box" style="margin-top:20px;"><h2>Session Win Rate %</h2><canvas id="sessionWinChart"></canvas></div>
+        <div class="chart-box" style="margin-top:20px;"><h2>Best Day of Week</h2><canvas id="dayChart"></canvas></div>
+      </div>
+
+      <!-- TAB: BACKUP -->
+      <div id="tab-backup" class="tab-content">
+        <h2>💾 Backup System</h2>
+        <div class="backup-box">
+          <div class="backup-card">
+            <h3>⬇️ Export Backup</h3>
+            <p>Download all your trades as a JSON backup file</p>
+            <button onclick="exportJSON()" class="export-btn">Download JSON Backup</button>
+          </div>
+          <div class="backup-card">
+            <h3>⬆️ Restore Backup</h3>
+            <p>Restore your trades from a JSON backup file</p>
+            <button onclick="document.getElementById('restoreFile').click()" class="import-btn">Restore from JSON</button>
+            <input type="file" id="restoreFile" accept=".json" style="display:none" onchange="importJSON(event)">
+          </div>
+          <div class="backup-card">
+            <h3>🗑️ Clear All Data</h3>
+            <p>Permanently delete all your trading data</p>
+            <button onclick="clearAllData()" class="delete-btn" style="width:100%;padding:12px;">Clear All Trades</button>
+          </div>
+        </div>
+        <div class="backup-info">
+          <p>Total Trades saved: <strong id="backupTradeCount">0</strong></p>
+          <p>Last backup: <strong id="lastBackupTime">Never</strong></p>
+        </div>
+      </div>
+
+    </div>
+
+      <!-- TAB: TRADER SCORE -->
+      <div id="tab-score" class="tab-content">
+        <h2>🏆 Trader Score</h2>
+        <p class="ai-desc">Your overall trading performance score based on discipline, consistency and risk management.</p>
+        <div id="traderScoreDisplay"></div>
+        <div class="stats" style="margin-top:20px;" id="scoreStats"></div>
+        <div class="chart-box" style="margin-top:20px;">
+          <h2>Score Breakdown</h2>
+          <canvas id="scoreChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+  <!-- Screenshot Zoom Modal -->
+  <div id="imageModal" class="image-modal">
+    <span id="closeModal">&times;</span>
+    <img id="modalImage">
+  </div>
+
+  <!-- Google Analytics — Replace G-6WBZS7R7QC with your GA4 Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6WBZS7R7QC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6WBZS7R7QC');
+  </script>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYLiWO1W1leHPbkyNIOboZEXCqwaCOjYQ",
+      authDomain: "trading-journal-8a0ea.firebaseapp.com",
+      projectId: "trading-journal-8a0ea",
+      storageBucket: "trading-journal-8a0ea.firebasestorage.app",
+      messagingSenderId: "77123353596",
+      appId: "1:77123353596:web:17cc7fc8ab0935cda75079"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // ---- Expose to global scope ----
+    window._firebaseAuth = auth;
+    window._firebaseDB = db;
+    window._firebaseFns = {
+      createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
+      collection, addDoc, getDocs, deleteDoc, doc, updateDoc,
+      query, orderBy, setDoc, getDoc
+    };
+    window._googleProvider = googleProvider;
+
+    // Auth state listener
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("authSection").style.display = "none";
+        document.getElementById("mainApp").style.display = "block";
+        document.getElementById("userEmailDisplay").textContent = "👤 " + (user.email || user.displayName);
+        window._currentUser = user;
+        window.loadTradesFromFirestore();
+        window.loadAccountSettingsFromFirestore();
+      } else {
+        document.getElementById("authSection").style.display = "block";
+        document.getElementById("mainApp").style.display = "none";
+        window._currentUser = null;
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

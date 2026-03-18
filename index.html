@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== PRIMARY SEO ===== -->
+  <title>TradoVault — Best Trading Journal App for Indian Traders | Free & Pro</title>
+  <meta name="description" content="TradoVault is India's most powerful trading journal. Track trades, analyze patterns, get AI-powered insights, replay trades, and grow your edge. Free plan available. No credit card needed.">
+  <meta name="keywords" content="trading journal, trading journal app, best trading journal India, trade tracker, stock market journal, forex journal, crypto trading journal, AI trading review, trade analyzer, intraday trading journal, TradoVault">
+  <meta name="author" content="TradoVault">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tradovaai.vercel.app/">
+
+  <!-- ===== OPEN GRAPH (Facebook / WhatsApp) ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tradovaai.vercel.app/">
+  <meta property="og:title" content="TradoVault — Smart Trading Journal for Indian Traders">
+  <meta property="og:description" content="Track every trade, analyze your patterns, get AI-powered insights and grow your edge. India's most powerful trading journal. Start free!">
+  <meta property="og:image" content="https://tradovaai.vercel.app/og-image.png">
+  <meta property="og:site_name" content="TradoVault">
+  <meta property="og:locale" content="en_IN">
+
+  <!-- ===== TWITTER CARD ===== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://tradovaai.vercel.app/">
+  <meta name="twitter:title" content="TradoVault — Smart Trading Journal">
+  <meta name="twitter:description" content="India's most powerful trading journal. Track trades, AI review, replay & analytics. Start free!">
+  <meta name="twitter:image" content="https://tradovaai.vercel.app/og-image.png">
+
+  <!-- ===== GOOGLE SITE VERIFICATION ===== -->
+  <meta name="google-site-verification" content="google8a228b2d0d8edb5e">
+
+  <!-- ===== SCHEMA MARKUP (Structured Data for Google) ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "TradoVault",
+    "url": "https://tradovaai.vercel.app/",
+    "description": "India's most powerful trading journal — track every trade, analyze your patterns, get AI-powered insights and grow your edge.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web, Android, iOS",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Free Plan",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro Plan",
+        "price": "199",
+        "priceCurrency": "INR",
+        "billingIncrement": "month"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "500"
+    }
+  }
+  </script>
+
+  <!-- ===== FAQ SCHEMA (Google Featured Snippets) ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does TradoVault work on mobile?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! TradoVault is fully responsive and works perfectly on mobile, tablet and PC."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is included in the Free plan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Free plan includes 20 trades, basic analytics, trade history and cloud sync. Upgrade anytime."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does AI Review work in TradoVault?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AI analyzes your last 20 trades and provides detailed feedback — covering mistakes, best strategies, risk management and psychology tips."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my trading data safe on TradoVault?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely! Your data is securely stored in Google Firebase. Only you can access your data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I cancel TradoVault Pro anytime?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, no lock-in. You can cancel the Pro plan anytime and revert to the Free plan."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/landing.css">
+
+  <!-- Google Analytics — Replace G-6WBZS7R7QC with your GA4 Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6WBZS7R7QC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6WBZS7R7QC');
+  </script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="logo">📈 TradoVault</div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-btns">
+        <a href="app.html" class="btn-outline-nav">Login</a>
+        <a href="#pricing" class="btn-primary-nav">Get Started →</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#features" onclick="toggleMenu()">Features</a>
+      <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+      <a href="#faq" onclick="toggleMenu()">FAQ</a>
+      <a href="app.html">Login</a>
+      <a href="#pricing" onclick="toggleMenu()">Get Started →</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-orb1"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-left">
+      <div class="hero-badge">🚀 Trusted by 500+ Traders</div>
+      <h1 class="hero-title">
+        Trade Smarter.<br>
+        <span class="gradient-text">Journal Better.</span>
+      </h1>
+      <p class="hero-sub">
+        India's most powerful trading journal — track every trade, analyze your patterns,
+        get AI-powered insights and grow your edge. All in one place.
+      </p>
+      <div class="hero-btns">
+        <a href="app.html" class="btn-hero-primary">Start Free — No Card Needed</a>
+        <a href="#features" class="btn-hero-ghost">See Features ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-num">500+</div>
+          <div class="hstat-label">Active Traders</div>
+        </div>
+        <div class="hstat-div"></div>
+        <div class="hstat">
+          <div class="hstat-num">50K+</div>
+          <div class="hstat-label">Trades Logged</div>
+        </div>
+        <div class="hstat-div"></div>
+        <div class="hstat">
+          <div class="hstat-num">4.9★</div>
+          <div class="hstat-label">User Rating</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="mock-card">
+        <div class="mock-header">
+          <span class="mdot r"></span>
+          <span class="mdot y"></span>
+          <span class="mdot g"></span>
+          <span class="mock-title">Trading Dashboard</span>
+        </div>
+        <div class="mock-stats">
+          <div class="mstat"><div class="msl">Win Rate</div><div class="msv green">68.4%</div></div>
+          <div class="mstat"><div class="msl">Total P&L</div><div class="msv green">+₹48,250</div></div>
+          <div class="mstat"><div class="msl">Trades</div><div class="msv">124</div></div>
+          <div class="mstat"><div class="msl">Best Trade</div><div class="msv green">+₹12,400</div></div>
+        </div>
+        <div class="mock-chart">
+          <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00f5c4" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#00f5c4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,70 L30,60 L60,52 L90,40 L120,33 L150,24 L180,19 L210,21 L240,14 L270,9 L300,6 L300,80 L0,80Z" fill="url(#cg)"/>
+            <path d="M0,70 L30,60 L60,52 L90,40 L120,33 L150,24 L180,19 L210,21 L240,14 L270,9 L300,6" fill="none" stroke="#00f5c4" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="mock-trades">
+          <div class="mtr"><span class="lb">Long</span><span>BTCUSDT</span><span class="green">+₹4,200</span></div>
+          <div class="mtr"><span class="sb">Short</span><span>ETHUSDT</span><span class="red">-₹800</span></div>
+          <div class="mtr"><span class="lb">Long</span><span>BNBUSDT</span><span class="green">+₹2,100</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features" id="features">
+    <div class="sec-inner">
+      <div class="sec-badge">✨ Features</div>
+      <h2 class="sec-title">Everything You Need to <span class="gradient-text">Trade Better</span></h2>
+      <p class="sec-sub">Built for serious traders who want data-driven insights, not just a spreadsheet.</p>
+      <div class="feat-grid">
+
+        <div class="feat-card feat-wide">
+          <div class="feat-icon">📒</div>
+          <h3>Trade Journal</h3>
+          <p>Log every trade with entry, exit, SL, TP, strategy, tags, screenshots and notes. Full trade history with smart filters.</p>
+          <div class="feat-pills"><span>Long/Short</span><span>R:R Calculator</span><span>Screenshots</span><span>Tags</span></div>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">📊</div>
+          <h3>Charts & Analytics</h3>
+          <p>7 powerful charts — Equity curve, Win/Loss pie, Monthly P&L, Max Drawdown, Pair & Strategy performance.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">🤖</div>
+          <h3>AI Review</h3>
+          <p>AI-powered feedback on your trades — spot repeat mistakes, best strategies, and psychology insights in Hindi.</p>
+          <span class="pro-tag">PRO</span>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">▶️</div>
+          <h3>Trade Replay</h3>
+          <p>Replay your trades one by one and watch your equity curve build live — like a trading game.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">🖼️</div>
+          <h3>Screenshot Gallery</h3>
+          <p>All your chart screenshots in one place. Click to zoom and see profit/loss per trade instantly.</p>
+        </div>
+
+        <div class="feat-card feat-wide">
+          <div class="feat-icon">☁️</div>
+          <h3>Firebase Cloud Sync</h3>
+          <p>Your data is safe in the cloud. Login from any device — mobile, tablet or PC — and your trades are always synced in real-time.</p>
+          <div class="feat-pills"><span>Google Login</span><span>Real-time Sync</span><span>Secure</span><span>Any Device</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="howit">
+    <div class="sec-inner">
+      <div class="sec-badge">⚡ Simple Process</div>
+      <h2 class="sec-title">Start in <span class="gradient-text">3 Simple Steps</span></h2>
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Create Account</h3>
+          <p>Sign up free with email or Google. No credit card needed to get started.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>Log Your Trades</h3>
+          <p>Add trades with pair, entry, exit, strategy, tags and chart screenshots.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>Analyze & Improve</h3>
+          <p>View charts, get AI review, replay trades and become a consistently profitable trader.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section class="pricing" id="pricing">
+    <div class="sec-inner">
+      <div class="sec-badge">💰 Pricing</div>
+      <h2 class="sec-title">Simple, <span class="gradient-text">Transparent Pricing</span></h2>
+      <p class="sec-sub">Start free. Upgrade when you're ready to level up.</p>
+      <div class="price-grid">
+
+        <!-- FREE -->
+        <div class="price-card">
+          <div class="plan-label">Free</div>
+          <div class="plan-price">₹0 <span class="plan-per">/forever</span></div>
+          <div class="plan-tagline">Perfect to get started</div>
+          <ul class="plan-list">
+            <li>✅ 20 Trades</li>
+            <li>✅ Basic Analytics</li>
+            <li>✅ Trade History</li>
+            <li>✅ Firebase Cloud Sync</li>
+            <li>✅ Screenshot Upload</li>
+            <li>❌ AI Review</li>
+            <li>❌ Trade Replay</li>
+            <li>❌ Export / Backup</li>
+            <li>❌ Advanced Charts</li>
+          </ul>
+          <a href="app.html" class="plan-btn-outline">Start Free →</a>
+        </div>
+
+        <!-- PRO -->
+        <div class="price-card price-card-pro">
+          <div class="pro-popular">⭐ Most Popular</div>
+          <div class="plan-label">Pro</div>
+          <div class="plan-price">₹199 <span class="plan-per">/month</span></div>
+          <div class="plan-tagline">For serious traders</div>
+          <ul class="plan-list">
+            <li>✅ Unlimited Trades</li>
+            <li>✅ Advanced Analytics</li>
+            <li>✅ Trade History</li>
+            <li>✅ Firebase Cloud Sync</li>
+            <li>✅ Screenshot Upload</li>
+            <li>✅ AI Review</li>
+            <li>✅ Trade Replay</li>
+            <li>✅ Export / Backup</li>
+            <li>✅ All Charts + Drawdown</li>
+          </ul>
+          <!-- FIX: Direct mailto link — Cloudflare CDN link was causing 404 on Vercel -->
+          <a href="mailto:documorahelp@gmail.com?subject=TradoVault%20Pro%20Upgrade%20Request&body=Hi%2C%20I%20want%20to%20upgrade%20to%20Pro%20Plan%20%E2%82%B9199%2Fmonth.%20Please%20activate%20my%20account." class="plan-btn-pro">📧 Email to Upgrade →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq" id="faq">
+    <div class="sec-inner">
+      <div class="sec-badge">❓ FAQ</div>
+      <h2 class="sec-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+      <div class="faq-list">
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Does this app work on mobile? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Yes! TradoVault is fully responsive and works perfectly on mobile, tablet and PC.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What is included in the Free plan? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">The Free plan includes 20 trades, basic analytics, trade history and cloud sync. Upgrade anytime.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Is payment secure? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Yes! We use secure payment methods. UPI, Card and NetBanking are all accepted.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Is my data safe? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Absolutely! Your data is securely stored in Google Firebase. Only you can access your data.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">How does AI Review work? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">AI analyzes your last 20 trades and provides detailed feedback — covering mistakes, best strategies, risk management and psychology tips.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Can I cancel anytime? <span class="faq-arrow">▼</span></div>
+          <div class="faq-a">Yes, no lock-in. You can cancel the Pro plan anytime and revert to the Free plan.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEO CONTENT SECTION ===== -->
+  <section style="background:#060914;padding:60px 20px;">
+    <div style="max-width:860px;margin:0 auto;color:#94a3b8;line-height:1.9;font-size:15px;">
+      <h2 style="color:#e2e8f0;font-size:1.5rem;margin-bottom:16px;">What is TradoVault — India's Best Trading Journal App?</h2>
+      <p>TradoVault is a free online <strong style="color:#00f5c4;">trading journal</strong> and <strong style="color:#00f5c4;">trade tracker</strong> built specifically for Indian traders. Whether you trade stocks, crypto, forex, or futures — TradoVault helps you log every trade, analyze your performance, and grow as a trader.</p>
+
+      <h3 style="color:#e2e8f0;font-size:1.1rem;margin:28px 0 10px;">Why Every Trader Needs a Trading Journal</h3>
+      <p>Most traders lose money not because of bad strategies, but because of repeated mistakes and lack of self-awareness. A <strong style="color:#00f5c4;">trading log</strong> helps you identify patterns, track your win rate, and improve your risk management discipline over time. Studies show that traders who journal consistently perform significantly better than those who don't.</p>
+
+      <h3 style="color:#e2e8f0;font-size:1.1rem;margin:28px 0 10px;">Key Features of Our Trading Performance Tool</h3>
+      <p>TradoVault is not just a spreadsheet — it's a complete <strong style="color:#00f5c4;">trading performance tool</strong>. You get 7 powerful charts including equity curve, win/loss ratio, monthly P&L, and drawdown analysis. Our AI Review feature analyzes your last 20 trades and gives you personalized feedback in both English and Hindi. The Trader Score system rates your discipline, consistency, and risk management on a scale of 0–100.</p>
+
+      <h3 style="color:#e2e8f0;font-size:1.1rem;margin:28px 0 10px;">Free Trading Journal for Indian Traders</h3>
+      <p>TradoVault offers a completely free plan with 20 trades, basic analytics, and Firebase cloud sync — no credit card required. For serious traders, the Pro plan at just ₹199/month unlocks unlimited trades, AI Review, Trade Replay, advanced charts and full export/backup features. It is the most affordable <strong style="color:#00f5c4;">trading journal India</strong> has ever seen.</p>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="cta-orb"></div>
+    <div class="sec-inner" style="text-align:center; position:relative; z-index:1;">
+      <h2 class="cta-title">Ready to Trade <span class="gradient-text">Smarter?</span></h2>
+      <p class="cta-sub">Join 500+ traders who are already using TradoVault to improve their performance.</p>
+      <a href="app.html" class="btn-hero-primary" style="display:inline-block;">Start Free Today →</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">📈 TradoVault</div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="app.html">App</a>
+      </div>
+      <div class="footer-copy">© 2026 TradoVault. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener("scroll", () => {
+      const nav = document.getElementById("navbar");
+      nav.classList.toggle("scrolled", window.scrollY > 50);
+    });
+
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("open");
+    }
+
+    function toggleFaq(item) {
+      item.classList.toggle("open");
+    }
+  </script>
+
+</body>
+</html>
